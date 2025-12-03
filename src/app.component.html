@@ -1,0 +1,11 @@
+<app-navbar></app-navbar>
+
+<main class="flex-grow">
+  <router-outlet></router-outlet>
+</main>
+
+<app-footer></app-footer>
+
+@if (isBookingOpen()) {
+  <app-booking-dialog></app-booking-dialog>
+}

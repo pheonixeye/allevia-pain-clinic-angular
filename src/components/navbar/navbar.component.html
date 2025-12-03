@@ -1,0 +1,130 @@
+<header class="bg-white dark:bg-slate-900 shadow-md sticky top-0 z-40">
+  <nav class="container mx-auto px-6 py-4">
+    <div class="flex items-center justify-between">
+      <a [routerLink]="['/', currentLang(), 'home']" class="text-2xl font-bold text-sky-700 dark:text-sky-400">Allevia
+        Clinic</a>
+
+      <!-- Desktop Menu -->
+      <div class="hidden md:flex items-center space-x-4 rtl:space-x-reverse">
+        @let t = translations();
+        <a [routerLink]="['/', currentLang(), 'home']" routerLinkActive="text-sky-600 dark:text-sky-400 font-semibold"
+          [routerLinkActiveOptions]="{exact: true}"
+          class="text-gray-600 dark:text-gray-300 hover:text-sky-600 dark:hover:text-sky-400 transition-colors">{{
+          t['nav.home'] }}</a>
+        <a [routerLink]="['/', currentLang(), 'about']" routerLinkActive="text-sky-600 dark:text-sky-400 font-semibold"
+          class="text-gray-600 dark:text-gray-300 hover:text-sky-600 dark:hover:text-sky-400 transition-colors">{{
+          t['nav.about'] }}</a>
+        <a [routerLink]="['/', currentLang(), 'services']"
+          routerLinkActive="text-sky-600 dark:text-sky-400 font-semibold"
+          class="text-gray-600 dark:text-gray-300 hover:text-sky-600 dark:hover:text-sky-400 transition-colors">{{
+          t['nav.services'] }}</a>
+        <a [routerLink]="['/', currentLang(), 'articles']"
+          routerLinkActive="text-sky-600 dark:text-sky-400 font-semibold"
+          class="text-gray-600 dark:text-gray-300 hover:text-sky-600 dark:hover:text-sky-400 transition-colors">{{
+          t['nav.articles'] }}</a>
+
+        <!-- Theme Toggle Button -->
+        <button (click)="toggleTheme()"
+          class="px-3 py-1 text-gray-600 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
+          [attr.aria-label]="isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode'">
+          @if (isDarkMode()) {
+          <!-- Sun icon for light mode -->
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z">
+            </path>
+          </svg>
+          } @else {
+          <!-- Moon icon for dark mode -->
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+          </svg>
+          }
+        </button>
+
+        <button (click)="switchLanguage()"
+          class="px-3 py-1 text-gray-600 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors">{{
+          t['nav.language'] }}</button>
+        <button (click)="openBookingDialog()"
+          class="px-4 py-2 text-white bg-sky-600 rounded-lg hover:bg-sky-700 transition-colors">{{ t['nav.book']
+          }}</button>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <div class="md:hidden">
+        <button (click)="toggleMobileMenu()"
+          class="text-gray-600 dark:text-gray-300 focus:outline-none w-10 h-10 relative">
+          <div class="block w-5 absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
+            <span aria-hidden="true"
+              class="block absolute h-0.5 w-5 bg-current transform transition duration-500 ease-in-out"
+              [class.rotate-45]="isMobileMenuOpen()" [class.-translate-y-1.5]="!isMobileMenuOpen()"></span>
+            <span aria-hidden="true"
+              class="block absolute h-0.5 w-5 bg-current transform transition duration-500 ease-in-out"
+              [class.opacity-0]="isMobileMenuOpen()"></span>
+            <span aria-hidden="true"
+              class="block absolute h-0.5 w-5 bg-current transform transition duration-500 ease-in-out"
+              [class.-rotate-45]="isMobileMenuOpen()" [class.translate-y-1.5]="!isMobileMenuOpen()"></span>
+          </div>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Menu Overlay -->
+    @if (isMobileMenuOpen()) {
+    <div
+      class="md:hidden absolute top-full left-0 w-full bg-white dark:bg-slate-900 shadow-lg border-t dark:border-gray-800 animate-slide-down origin-top">
+      <div class="px-6 py-4 space-y-2">
+        @let t = translations();
+        <a (click)="closeMobileMenu()" [routerLink]="['/', currentLang(), 'home']"
+          routerLinkActive="text-sky-600 dark:text-sky-400 font-semibold" [routerLinkActiveOptions]="{exact: true}"
+          class="block py-2 text-gray-600 dark:text-gray-300 hover:text-sky-600 dark:hover:text-sky-400">{{
+          t['nav.home']
+          }}</a>
+        <a (click)="closeMobileMenu()" [routerLink]="['/', currentLang(), 'about']"
+          routerLinkActive="text-sky-600 dark:text-sky-400 font-semibold"
+          class="block py-2 text-gray-600 dark:text-gray-300 hover:text-sky-600 dark:hover:text-sky-400">{{
+          t['nav.about']
+          }}</a>
+        <a (click)="closeMobileMenu()" [routerLink]="['/', currentLang(), 'services']"
+          routerLinkActive="text-sky-600 dark:text-sky-400 font-semibold"
+          class="block py-2 text-gray-600 dark:text-gray-300 hover:text-sky-600 dark:hover:text-sky-400">{{
+          t['nav.services'] }}</a>
+        <a (click)="closeMobileMenu()" [routerLink]="['/', currentLang(), 'articles']"
+          routerLinkActive="text-sky-600 dark:text-sky-400 font-semibold"
+          class="block py-2 text-gray-600 dark:text-gray-300 hover:text-sky-600 dark:hover:text-sky-400">{{
+          t['nav.articles'] }}</a>
+
+        <!-- Theme Toggle in Mobile -->
+        <button (click)="toggleTheme()"
+          class="flex items-center gap-2 w-full text-left py-2 text-gray-600 dark:text-gray-300 hover:text-sky-600 dark:hover:text-sky-400">
+          @if (isDarkMode()) {
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z">
+            </path>
+          </svg>
+          <span>Light Mode</span>
+          } @else {
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+          </svg>
+          <span>Dark Mode</span>
+          }
+        </button>
+
+        <button (click)="switchLanguage()"
+          class="block w-full text-left py-2 text-gray-600 dark:text-gray-300 hover:text-sky-600 dark:hover:text-sky-400">{{
+          t['nav.language'] }}</button>
+
+        <button (click)="openBookingDialog()"
+          class="mt-2 w-full px-4 py-2 text-white bg-sky-600 rounded-lg hover:bg-sky-700 transition-colors">{{
+          t['nav.book'] }}</button>
+      </div>
+    </div>
+    <!-- Backdrop -->
+    <div class="md:hidden fixed inset-0 bg-black/50 z-30 top-[72px]" (click)="closeMobileMenu()"></div>
+    }
+  </nav>
+</header>

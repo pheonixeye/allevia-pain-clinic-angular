@@ -1,0 +1,59 @@
+@let t = translations();
+@let lang = currentLang();
+<div class="animate-fade-in">
+  <!-- Hero Section -->
+  <section class="bg-sky-100 dark:bg-slate-800 text-slate-800 dark:text-gray-100">
+    <div class="container mx-auto px-6 py-24 text-center">
+      <h1 class="text-4xl md:text-6xl font-bold mb-4">{{ t['hero.title'] }}</h1>
+      <p class="text-lg md:text-xl max-w-3xl mx-auto text-slate-600 dark:text-gray-300 mb-8">{{ t['hero.subtitle'] }}
+      </p>
+      <!-- Desktop Button: Discover Services -->
+      <a [routerLink]="['/', lang, 'services']"
+        class="hidden md:inline-block bg-sky-600 text-white font-bold py-3 px-8 rounded-lg text-lg hover:bg-sky-700 transition-transform hover:scale-105">
+        {{ t['hero.cta'] }}
+      </a>
+
+      <!-- Mobile Button: Book Appointment -->
+      <button (click)="openBookingDialog()"
+        class="md:hidden inline-block bg-sky-600 text-white font-bold py-3 px-8 rounded-lg text-lg hover:bg-sky-700 transition-transform hover:scale-105">
+        {{ t['nav.book'] }}
+      </button>
+    </div>
+  </section>
+
+  <!-- Team Preview Section -->
+  <section class="py-20 bg-white dark:bg-slate-900">
+    <div class="container mx-auto px-6">
+      <h2 class="text-3xl md:text-4xl font-bold text-center text-slate-800 dark:text-gray-100 mb-12">{{ t['team.title']
+        }}</h2>
+      <div class="flex flex-wrap justify-center gap-8 md:gap-12">
+        @for (doctor of doctors; track doctor.id) {
+        <div class="text-center">
+          <img [src]="doctor.image" [alt]="doctor.name"
+            class="w-32 h-32 rounded-full mx-auto mb-4 object-cover border-4 border-sky-200 dark:border-sky-700 shadow-lg">
+          <h3 class="text-xl font-semibold text-slate-700 dark:text-gray-200">{{ doctor.name }}</h3>
+          <p class="text-slate-500 dark:text-gray-400">{{ doctor.role[lang] }}</p>
+        </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Location & Contact Section -->
+  <section class="py-20 bg-gray-50 dark:bg-slate-800">
+    <div class="container mx-auto px-6">
+      <h2 class="text-3xl md:text-4xl font-bold text-center text-slate-800 dark:text-gray-100 mb-12">{{
+        t['location.title'] }}</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+        <div class="h-80 bg-gray-300 dark:bg-slate-700 rounded-lg shadow-md flex items-center justify-center">
+          <p class="text-gray-500 dark:text-gray-400">Map Placeholder</p>
+        </div>
+        <div class="text-lg text-slate-700 dark:text-gray-300 space-y-4 text-center md:text-left rtl:md:text-right">
+          <p><strong>{{ t['location.address'] }}</strong></p>
+          <p><strong>{{ t['location.phone'] }}</strong></p>
+          <p><strong>{{ t['location.email'] }}</strong></p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

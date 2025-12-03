@@ -1,0 +1,61 @@
+<div class="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center p-4">
+  <div (click)="$event.stopPropagation()"
+    class="bg-white dark:bg-slate-900 rounded-lg shadow-2xl w-full max-w-lg mx-auto p-6 md:p-8 relative transform transition-all animate-fade-in-up">
+    @let t = translations();
+
+    <button (click)="closeDialog()"
+      class="absolute top-4 right-4 rtl:right-auto rtl:left-4 text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+      </svg>
+    </button>
+
+    @if (!isSubmitted()) {
+    <div>
+      <h2 class="text-2xl md:text-3xl font-bold text-slate-800 dark:text-gray-100 mb-6 text-center">{{
+        t['booking.title'] }}</h2>
+      <form (submit)="submitForm($event)" class="space-y-5">
+        <div>
+          <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{{ t['booking.name']
+            }}</label>
+          <input type="text" id="name" required
+            class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 focus:ring-sky-500 focus:border-sky-500">
+        </div>
+        <div>
+          <label for="phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{{
+            t['booking.phone'] }}</label>
+          <input type="tel" id="phone" required
+            class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 focus:ring-sky-500 focus:border-sky-500">
+        </div>
+        <div>
+          <label for="date" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{{ t['booking.date']
+            }}</label>
+          <input type="date" id="date" required
+            class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 focus:ring-sky-500 focus:border-sky-500">
+        </div>
+        <div>
+          <label for="message" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{{
+            t['booking.message'] }}</label>
+          <textarea id="message" rows="3"
+            class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 focus:ring-sky-500 focus:border-sky-500"></textarea>
+        </div>
+        <button type="submit"
+          class="w-full py-3 px-4 bg-sky-600 text-white font-semibold rounded-lg hover:bg-sky-700 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">{{
+          t['booking.submit'] }}</button>
+      </form>
+    </div>
+    } @else {
+    <div class="text-center py-8">
+      <svg class="w-16 h-16 mx-auto text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      <h3 class="text-2xl font-bold text-slate-800 dark:text-gray-100 mt-4">{{ t['booking.success'] }}</h3>
+      <button (click)="closeDialog()"
+        class="mt-6 py-2 px-6 bg-sky-600 text-white font-semibold rounded-lg hover:bg-sky-700 transition-colors">{{
+        t['booking.close'] }}</button>
+    </div>
+    }
+  </div>
+</div>

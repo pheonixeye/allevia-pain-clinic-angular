@@ -1,0 +1,33 @@
+@let t = translations();
+@let lang = currentLang();
+
+<div class="animate-fade-in">
+  <header class="bg-sky-600 text-white py-16">
+    <div class="container mx-auto px-6 text-center">
+      <h1 class="text-4xl md:text-5xl font-bold">{{ t['about.title'] }}</h1>
+    </div>
+  </header>
+
+  <section class="py-20 bg-white dark:bg-slate-900">
+    <div class="container mx-auto px-6 max-w-4xl">
+      <p class="text-lg text-slate-600 dark:text-gray-300 leading-relaxed text-center">{{ t['about.paragraph'] }}</p>
+    </div>
+  </section>
+
+  <section class="py-20 bg-gray-50 dark:bg-slate-800">
+    <div class="container mx-auto px-6">
+      <h2 class="text-3xl md:text-4xl font-bold text-center text-slate-800 dark:text-gray-100 mb-12">{{
+        t['about.team.title'] }}</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+        @for (member of team; track member.id) {
+        <div class="bg-white dark:bg-slate-900 rounded-lg shadow-lg p-6 text-center hover:shadow-xl transition-shadow">
+          <img [src]="member.image" [alt]="member.name"
+            class="w-32 h-32 rounded-full mx-auto mb-4 object-cover border-4 border-gray-200 dark:border-gray-700">
+          <h3 class="text-xl font-semibold text-slate-800 dark:text-gray-100">{{ member.name }}</h3>
+          <p class="text-sky-600 dark:text-sky-400">{{ member.role[lang] }}</p>
+        </div>
+        }
+      </div>
+    </div>
+  </section>
+</div>
