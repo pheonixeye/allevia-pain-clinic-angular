@@ -29,9 +29,9 @@
       <div class="flex flex-wrap justify-center gap-8 md:gap-12">
         @for (doctor of doctors; track doctor.id) {
         <div class="text-center">
-          <img [src]="doctor.image" [alt]="doctor.name"
+          <img [src]="doctor.image" [alt]="doctor.name[lang]"
             class="w-32 h-32 rounded-full mx-auto mb-4 object-cover border-4 border-sky-200 dark:border-sky-700 shadow-lg">
-          <h3 class="text-xl font-semibold text-slate-700 dark:text-gray-200">{{ doctor.name }}</h3>
+          <h3 class="text-xl font-semibold text-slate-700 dark:text-gray-200">{{ doctor.name[lang] }}</h3>
           <p class="text-slate-500 dark:text-gray-400">{{ doctor.role[lang] }}</p>
         </div>
         }

@@ -20,7 +20,7 @@ export class HomeComponent {
 
   translations = this.translationService.translations;
   currentLang = this.translationService.currentLang;
-  doctors = this.dataService.getTeam().filter(m => m.name.startsWith('Dr.'));
+  doctors = this.dataService.getTeam().filter(m => m.name.en.startsWith('Dr.'));
 
   openBookingDialog() {
     this.dialogService.open();

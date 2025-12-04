@@ -22,6 +22,10 @@
           routerLinkActive="text-sky-600 dark:text-sky-400 font-semibold"
           class="text-gray-600 dark:text-gray-300 hover:text-sky-600 dark:hover:text-sky-400 transition-colors">{{
           t['nav.articles'] }}</a>
+        <a [routerLink]="['/', currentLang(), 'patient-portal']"
+          routerLinkActive="text-sky-600 dark:text-sky-400 font-semibold"
+          class="text-gray-600 dark:text-gray-300 hover:text-sky-600 dark:hover:text-sky-400 transition-colors">{{
+          t['portal.title'] }}</a>
 
         <!-- Theme Toggle Button -->
         <button (click)="toggleTheme()"
@@ -73,7 +77,7 @@
     <!-- Mobile Menu Overlay -->
     @if (isMobileMenuOpen()) {
     <div
-      class="md:hidden absolute top-full left-0 w-full bg-white dark:bg-slate-900 shadow-lg border-t dark:border-gray-800 animate-slide-down origin-top">
+      class="md:hidden absolute top-full left-0 w-full bg-white dark:bg-slate-900 shadow-lg border-t dark:border-gray-800 animate-slide-down origin-top z-40">
       <div class="px-6 py-4 space-y-2">
         @let t = translations();
         <a (click)="closeMobileMenu()" [routerLink]="['/', currentLang(), 'home']"
@@ -94,6 +98,10 @@
           routerLinkActive="text-sky-600 dark:text-sky-400 font-semibold"
           class="block py-2 text-gray-600 dark:text-gray-300 hover:text-sky-600 dark:hover:text-sky-400">{{
           t['nav.articles'] }}</a>
+        <a (click)="closeMobileMenu()" [routerLink]="['/', currentLang(), 'patient-portal']"
+          routerLinkActive="text-sky-600 dark:text-sky-400 font-semibold"
+          class="block py-2 text-gray-600 dark:text-gray-300 hover:text-sky-600 dark:hover:text-sky-400">{{
+          t['portal.title'] }}</a>
 
         <!-- Theme Toggle in Mobile -->
         <button (click)="toggleTheme()"

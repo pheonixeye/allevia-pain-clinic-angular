@@ -37,6 +37,26 @@ type ArticleRecord = {
     updated: string;
 };
 
+// Online Booking type for the booking form
+export type OnlineBooking = {
+    id?: string;
+    name: string;
+    phone: string;
+    prefered_date: string;
+    message?: string;
+    created?: string;
+    updated?: string;
+};
+
+// Visit type for patient portal
+export type Visit = {
+    id: string;
+    patient_id: string;
+    visit_date: string;
+    created?: string;
+    updated?: string;
+};
+
 export type PaginatedResult<T> = {
     page: number;
     perPage: number;
@@ -157,6 +177,58 @@ export class PocketBaseService {
                 ar: formattedDateAr
             }
         };
+    }
+
+    /**
+     * Create a new online booking
+     */
+    async createBooking(bookingData: Omit<OnlineBooking, 'id' | 'created' | 'updated'>): Promise<OnlineBooking> {
+        this.isLoading.set(true);
+        this.error.set(null);
+
+        try {
+            const record = await this.pb.collection('website_bookings').create<OnlineBooking>(bookingData);
+            console.log('Booking created successfully:', record);
+            return record;
+        } catch (err: any) {
+            const errorMessage = err?.message || 'Failed to create booking';
+            this.error.set(errorMessage);
+            console.error('PocketBase error:', err);
+            throw new Error(errorMessage);
+        } finally {
+            this.isLoading.set(false);
+        }
+    }
+
+    /**
+     * Get patient visits by patient ID with pagination
+     * Sorted from most recent to oldest
+     */
+    async getPatientVisits(patientId: string, page: number = 1, perPage: number = 5): Promise<PaginatedResult<Visit>> {
+        this.isLoading.set(true);
+        this.error.set(null);
+
+        try {
+            const result = await this.pb.collection('visits').getList<Visit>(page, perPage, {
+                filter: `patient_id="${patientId}"`,
+                sort: '-visit_date', // Sort by visit_date descending (newest first)
+            });
+
+            return {
+                page: result.page,
+                perPage: result.perPage,
+                totalItems: result.totalItems,
+                totalPages: result.totalPages,
+                items: result.items
+            };
+        } catch (err: any) {
+            const errorMessage = err?.message || 'Failed to fetch patient visits';
+            this.error.set(errorMessage);
+            console.error('PocketBase error:', err);
+            throw new Error(errorMessage);
+        } finally {
+            this.isLoading.set(false);
+        }
     }
 
     /**

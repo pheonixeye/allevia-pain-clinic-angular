@@ -1,5 +1,6 @@
 import { ApplicationConfig, provideZonelessChangeDetection } from '@angular/core';
 import { provideRouter, Routes, CanActivateFn, Router, withHashLocation } from '@angular/router';
+import { provideHttpClient } from '@angular/common/http';
 import { inject } from '@angular/core';
 
 import { HomeComponent } from './pages/home/home.component';
@@ -7,6 +8,7 @@ import { AboutComponent } from './pages/about/about.component';
 import { ServicesComponent } from './pages/services/services.component';
 import { ArticlesComponent } from './pages/articles/articles.component';
 import { ArticleDetailComponent } from './pages/article-detail/article-detail.component';
+import { PatientPortalComponent } from './pages/patient-portal/patient-portal.component';
 import { TranslationService } from './services/translation.service';
 
 export const langGuard: CanActivateFn = (route, state) => {
@@ -18,7 +20,7 @@ export const langGuard: CanActivateFn = (route, state) => {
     translationService.setLanguage(lang as 'en' | 'ar');
     return true;
   }
-  
+
   return router.parseUrl('en/home');
 };
 
@@ -32,6 +34,7 @@ export const routes: Routes = [
       { path: 'services', component: ServicesComponent },
       { path: 'articles', component: ArticlesComponent },
       { path: 'articles/:id', component: ArticleDetailComponent },
+      { path: 'patient-portal', component: PatientPortalComponent },
       { path: '', redirectTo: 'home', pathMatch: 'full' }
     ]
   },
@@ -43,5 +46,6 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideZonelessChangeDetection(),
     provideRouter(routes, withHashLocation()),
+    provideHttpClient(),
   ]
 };

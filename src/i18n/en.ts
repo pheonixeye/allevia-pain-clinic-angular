@@ -35,7 +35,7 @@ export const en = {
 
   // Services Page
   'services.title': 'Our Comprehensive Services',
-  
+
   // Articles Page
   'articles.title': 'Health & Wellness Articles',
   'articles.prev': 'Previous',
@@ -52,6 +52,26 @@ export const en = {
   'booking.date': 'Preferred Date',
   'booking.message': 'Message (Optional)',
   'booking.submit': 'Request Appointment',
-  'booking.success': 'Thank you! Your appointment request has been sent.',
+  'booking.success': 'Thank you! Your appointment request has been sent. Our team will contact you to confirm appointment details.',
   'booking.close': 'Close',
+
+  // Patient Portal
+  'portal.title': 'Patient Portal',
+  'portal.welcome': 'Welcome to the Allevia Patient Portal. Scan your QR code to view your visit history.',
+  'portal.instructions': 'Scan Your Patient QR Code',
+  'portal.scanButton': 'Start Scanner',
+  'portal.scanning': 'Scanning... Please point camera at QR code',
+  'portal.cancelScan': 'Cancel Scan',
+  'portal.loading': 'Loading your visits...',
+  'portal.visits.title': 'Your Visit History',
+  'portal.visits.date': 'Visit Date',
+  'portal.scanNew': 'Scan Another Code',
+  'portal.previous': 'Previous',
+  'portal.next': 'Next',
+  'portal.page': 'Page',
+  'portal.of': 'of',
+  'portal.error.camera': 'Camera error. Please ensure you have granted camera permissions.',
+  'portal.error.scan': 'Failed to scan QR code. Please try again.',
+  'portal.error.query': 'Failed to retrieve visits. Please try again later.',
+  'portal.error.noVisits': 'No visits found for this patient ID.',
 };
