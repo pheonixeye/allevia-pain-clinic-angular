@@ -1,17 +1,17 @@
 import {
   withHttpTransferCache
-} from "./chunk-XLNZIWY2.js";
+} from "./chunk-4LWK3USK.js";
 import {
   CommonModule,
   DomAdapter,
   PLATFORM_BROWSER_ID,
   getDOM,
   setRootDomAdapter
-} from "./chunk-CNVHSBV6.js";
+} from "./chunk-4XJ635HJ.js";
 import {
   XhrFactory,
   parseCookieValue
-} from "./chunk-OQP7OUDA.js";
+} from "./chunk-UC72YTJX.js";
 import {
   APP_ID,
   ApplicationModule,
@@ -53,7 +53,7 @@ import {
   withI18nSupport,
   withIncrementalHydration,
   ɵɵdefineNgModule
-} from "./chunk-S2YQ76QI.js";
+} from "./chunk-33FUPZ3B.js";
 import {
   DOCUMENT,
   ENVIRONMENT_INITIALIZER,
@@ -73,7 +73,7 @@ import {
   ɵɵdefineInjectable,
   ɵɵdefineInjector,
   ɵɵinject
-} from "./chunk-4GPVOUJ6.js";
+} from "./chunk-XG7GGOKA.js";
 import {
   __spreadValues
 } from "./chunk-46DXP6YY.js";
@@ -1713,7 +1713,7 @@ function provideClientHydration(...features) {
   }
   return makeEnvironmentProviders([typeof ngDevMode !== "undefined" && ngDevMode ? provideEnabledBlockingInitialNavigationDetector() : [], withDomHydration(), featuresKind.has(HydrationFeatureKind.NoHttpTransferCache) || hasHttpTransferCacheOptions ? [] : withHttpTransferCache({}), providers]);
 }
-var VERSION = new Version("21.0.2");
+var VERSION = new Version("21.0.1");
 
 export {
   EventManagerPlugin,
@@ -1752,4 +1752,4 @@ export {
   provideClientHydration,
   VERSION
 };
-//# sourceMappingURL=chunk-A25IJN7C.js.map
+//# sourceMappingURL=chunk-6GGZ46N3.js.map

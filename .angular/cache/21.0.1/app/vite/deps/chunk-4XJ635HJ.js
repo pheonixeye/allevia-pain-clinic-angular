@@ -42,7 +42,7 @@ import {
   ɵɵdirectiveInject,
   ɵɵinjectAttribute,
   ɵɵstyleProp
-} from "./chunk-S2YQ76QI.js";
+} from "./chunk-33FUPZ3B.js";
 import {
   DOCUMENT,
   DestroyRef,
@@ -59,7 +59,7 @@ import {
   ɵɵdefineInjectable,
   ɵɵdefineInjector,
   ɵɵinject
-} from "./chunk-4GPVOUJ6.js";
+} from "./chunk-XG7GGOKA.js";
 import {
   Subject
 } from "./chunk-3OW44ZN3.js";
@@ -3330,7 +3330,7 @@ function isPlatformBrowser(platformId) {
 function isPlatformServer(platformId) {
   return platformId === PLATFORM_SERVER_ID;
 }
-var VERSION = new Version("21.0.2");
+var VERSION = new Version("21.0.1");
 var ViewportScroller = class _ViewportScroller {
   static ɵprov = ɵɵdefineInjectable({
     token: _ViewportScroller,
@@ -4615,4 +4615,4 @@ export {
   PRECONNECT_CHECK_BLOCKLIST,
   NgOptimizedImage
 };
-//# sourceMappingURL=chunk-CNVHSBV6.js.map
+//# sourceMappingURL=chunk-4XJ635HJ.js.map

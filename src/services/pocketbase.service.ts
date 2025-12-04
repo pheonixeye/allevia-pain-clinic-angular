@@ -57,6 +57,14 @@ export type Visit = {
     updated?: string;
 };
 
+// Patient type
+export type Patient = {
+    id: string;
+    name: string;
+    created?: string;
+    updated?: string;
+};
+
 export type PaginatedResult<T> = {
     page: number;
     perPage: number;
@@ -122,7 +130,25 @@ export class PocketBaseService {
     }
 
     /**
-     * Get a single article by ID
+     * Get patient details by ID
+     */
+    async getPatient(patientId: string): Promise<Patient> {
+        this.isLoading.set(true);
+        this.error.set(null);
+
+        try {
+            const record = await this.pb.collection('patients').getOne<Patient>(patientId);
+            return record;
+        } catch (err: any) {
+            console.error('PocketBase error:', err);
+            throw new Error('Failed to fetch patient details');
+        } finally {
+            this.isLoading.set(false);
+        }
+    }
+
+    /**
+     * Fetch paginated articles from PocketBase
      */
     async getArticleById(id: string): Promise<Article | null> {
         this.isLoading.set(true);

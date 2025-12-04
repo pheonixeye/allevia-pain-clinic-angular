@@ -64,6 +64,7 @@ export const ar = {
   'portal.cancelScan': 'إلغاء المسح',
   'portal.loading': 'جاري تحميل زياراتك...',
   'portal.visits.title': 'سجل زياراتك',
+  'portal.patient': 'اسم المريض',
   'portal.visits.date': 'تاريخ الزيارة',
   'portal.scanNew': 'مسح رمز آخر',
   'portal.previous': 'السابق',

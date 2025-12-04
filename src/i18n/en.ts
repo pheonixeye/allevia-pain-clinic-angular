@@ -64,6 +64,7 @@ export const en = {
   'portal.cancelScan': 'Cancel Scan',
   'portal.loading': 'Loading your visits...',
   'portal.visits.title': 'Your Visit History',
+  'portal.patient': 'Patient Name',
   'portal.visits.date': 'Visit Date',
   'portal.scanNew': 'Scan Another Code',
   'portal.previous': 'Previous',

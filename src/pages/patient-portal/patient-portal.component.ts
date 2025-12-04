@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, inject, signal, OnDestroy } from '@
 import { CommonModule } from '@angular/common';
 import { Html5Qrcode } from 'html5-qrcode';
 import { TranslationService } from '../../services/translation.service';
-import { PocketBaseService } from '../../services/pocketbase.service';
+import { PocketBaseService, Patient } from '../../services/pocketbase.service';
 
 interface Visit {
     id: string;
@@ -30,7 +30,8 @@ export class PatientPortalComponent implements OnDestroy {
     errorMessage = signal<string | null>(null);
     scannedPatientId = signal<string | null>(null);
 
-    // Visits data
+    // Data
+    patient = signal<Patient | null>(null);
     visits = signal<Visit[]>([]);
     currentPage = signal(1);
     totalPages = signal(1);
@@ -65,21 +66,32 @@ export class PatientPortalComponent implements OnDestroy {
                     // QR Code scanned successfully
                     this.onScanSuccess(decodedText);
                 },
-                () => {
-                    // Scan error (can ignore these as they happen frequently while scanning)
+                (errorMessage) => {
+                    // Scan error - ignore to keep scanning active
+                    // Only log if it's not a standard scanning error
+                    if (!errorMessage.includes('No MultiFormat Readers')) {
+                        console.warn('Scan error:', errorMessage);
+                    }
                 }
             );
         } catch (error: any) {
             console.error('Scanner error:', error);
             this.errorMessage.set(error?.message || 'Failed to start camera. Please check permissions.');
-            this.isScanning.set(false);
+            // Keep isScanning true so user can retry if it was a temporary glitch, 
+            // but in this case (start failed), we might want to reset.
+            // However, user requested "component disappears when an error occurs... make it available to scan again"
+            // So we keep isScanning true but show error.
+            // But if start failed, the scanner UI might not be there. 
+            // Let's keep isScanning true so the "Cancel Scan" button is visible and user can try again.
         }
     }
 
     async stopScanner() {
         if (this.html5QrCode) {
             try {
-                await this.html5QrCode.stop();
+                if (this.html5QrCode.isScanning) {
+                    await this.html5QrCode.stop();
+                }
                 this.html5QrCode.clear();
             } catch (error) {
                 console.error('Error stopping scanner:', error);
@@ -93,15 +105,34 @@ export class PatientPortalComponent implements OnDestroy {
         // Stop scanner
         await this.stopScanner();
 
-        // Set patient ID and fetch visits
+        // Set patient ID and fetch details
         this.scannedPatientId.set(patientId);
         this.currentPage.set(1);
+
+        await this.fetchPatientDetails(patientId);
         await this.fetchVisits(patientId, 1);
+    }
+
+    async fetchPatientDetails(patientId: string) {
+        this.isLoading.set(true);
+        try {
+            const patient = await this.pocketbaseService.getPatient(patientId);
+            this.patient.set(patient);
+        } catch (error: any) {
+            console.error('Fetch patient error:', error);
+            this.errorMessage.set('Could not find patient details. Please check the QR code.');
+            // We still fetch visits even if patient details fail, or maybe stop?
+            // User requirement: "display a list of visits by the patient"
+            // If patient fetch fails, we might still want to show visits if possible, but likely the ID is wrong.
+        } finally {
+            this.isLoading.set(false);
+        }
     }
 
     async fetchVisits(patientId: string, page: number) {
         this.isLoading.set(true);
-        this.errorMessage.set(null);
+        // Don't clear error message here if it was set by fetchPatientDetails
+        // this.errorMessage.set(null); 
 
         try {
             const result = await this.pocketbaseService.getPatientVisits(patientId, page, this.perPage);
@@ -111,7 +142,10 @@ export class PatientPortalComponent implements OnDestroy {
             this.currentPage.set(page);
 
             if (result.items.length === 0 && page === 1) {
-                this.errorMessage.set('No visits found for this patient.');
+                // Only show "no visits" if we didn't already have an error
+                if (!this.errorMessage()) {
+                    this.errorMessage.set('No visits found for this patient.');
+                }
             }
         } catch (error: any) {
             console.error('Fetch visits error:', error);
@@ -136,6 +170,7 @@ export class PatientPortalComponent implements OnDestroy {
 
     resetPortal() {
         this.scannedPatientId.set(null);
+        this.patient.set(null);
         this.visits.set([]);
         this.currentPage.set(1);
         this.totalPages.set(1);

@@ -1011,8 +1011,8 @@ var formatter = {
     let value;
     try {
       value = sig();
-    } catch (e) {
-      return ["span", `Signal(⚠️ Error)${e.message ? `: ${e.message}` : ""}`];
+    } catch {
+      return ["span", "Signal(⚠️ Error)"];
     }
     const kind = "computation" in sig[SIGNAL] ? "Computed" : "Signal";
     const isPrimitive = value === null || !Array.isArray(value) && typeof value !== "object";
@@ -1134,7 +1134,7 @@ var Version = class {
     this.patch = parts.slice(2).join(".");
   }
 };
-var VERSION = new Version("21.0.2");
+var VERSION = new Version("21.0.1");
 var ERROR_DETAILS_PAGE_BASE_URL = (() => {
   const versionSubDomain = VERSION.major !== "0" ? `v${VERSION.major}.` : "";
   return `https://${versionSubDomain}angular.dev/errors`;
@@ -4659,4 +4659,4 @@ export {
   ResourceImpl,
   encapsulateResourceError
 };
-//# sourceMappingURL=chunk-4GPVOUJ6.js.map
+//# sourceMappingURL=chunk-XG7GGOKA.js.map
