@@ -1,67 +1,67 @@
 {
-  "hash": "a08b4a0a",
+  "hash": "f069ce28",
   "configHash": "4ae2ae84",
-  "lockfileHash": "8d419a02",
-  "browserHash": "4cecab9e",
+  "lockfileHash": "49760f3c",
+  "browserHash": "0dad0ea6",
   "optimized": {
     "@angular/common": {
       "src": "../../../../../../node_modules/@angular/common/fesm2022/common.mjs",
       "file": "@angular_common.js",
-      "fileHash": "a2f7bb63",
+      "fileHash": "14540e53",
       "needsInterop": false
     },
     "@angular/common/http": {
       "src": "../../../../../../node_modules/@angular/common/fesm2022/http.mjs",
       "file": "@angular_common_http.js",
-      "fileHash": "6781302e",
+      "fileHash": "f5ad766e",
       "needsInterop": false
     },
     "@angular/core": {
       "src": "../../../../../../node_modules/@angular/core/fesm2022/core.mjs",
       "file": "@angular_core.js",
-      "fileHash": "fceda446",
+      "fileHash": "2940ce19",
       "needsInterop": false
     },
     "@angular/core/rxjs-interop": {
       "src": "../../../../../../node_modules/@angular/core/fesm2022/rxjs-interop.mjs",
       "file": "@angular_core_rxjs-interop.js",
-      "fileHash": "a42dffc8",
+      "fileHash": "937ed615",
       "needsInterop": false
     },
     "@angular/forms": {
       "src": "../../../../../../node_modules/@angular/forms/fesm2022/forms.mjs",
       "file": "@angular_forms.js",
-      "fileHash": "0f8b64ca",
+      "fileHash": "656299fb",
       "needsInterop": false
     },
     "@angular/platform-browser": {
       "src": "../../../../../../node_modules/@angular/platform-browser/fesm2022/platform-browser.mjs",
       "file": "@angular_platform-browser.js",
-      "fileHash": "c992408c",
+      "fileHash": "6181009d",
       "needsInterop": false
     },
     "@angular/router": {
       "src": "../../../../../../node_modules/@angular/router/fesm2022/router.mjs",
       "file": "@angular_router.js",
-      "fileHash": "a7928ff3",
+      "fileHash": "00197992",
       "needsInterop": false
     },
     "html5-qrcode": {
       "src": "../../../../../../node_modules/html5-qrcode/esm/index.js",
       "file": "html5-qrcode.js",
-      "fileHash": "dbccd4f1",
+      "fileHash": "a3ee19ce",
       "needsInterop": false
     },
     "pocketbase": {
       "src": "../../../../../../node_modules/pocketbase/dist/pocketbase.es.mjs",
       "file": "pocketbase.js",
-      "fileHash": "1097a744",
+      "fileHash": "ba40d360",
       "needsInterop": false
     },
     "rxjs/operators": {
       "src": "../../../../../../node_modules/rxjs/dist/esm5/operators/index.js",
       "file": "rxjs_operators.js",
-      "fileHash": "d6af3ee3",
+      "fileHash": "e9e00c36",
       "needsInterop": false
     }
   },

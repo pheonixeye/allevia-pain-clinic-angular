@@ -263,4 +263,51 @@ export class PocketBaseService {
     getClient(): PocketBase {
         return this.pb;
     }
+
+    /**
+     * Get document type by name_en
+     */
+    async getDocumentTypeByName(name: string): Promise<DocumentType> {
+        try {
+            return await this.pb.collection('document_type').getFirstListItem<DocumentType>(`name_en="${name}"`);
+        } catch (err: any) {
+            console.error('PocketBase error fetching document type:', err);
+            throw new Error('Failed to fetch document type');
+        }
+    }
+
+    /**
+     * Get patient documents by patient ID, visit ID, and document type ID
+     */
+    async getPatientDocuments(patientId: string, visitId: string, documentTypeId: string): Promise<PatientDocument[]> {
+        try {
+            return await this.pb.collection('patient__documents').getFullList<PatientDocument>({
+                filter: `patient_id="${patientId}" && related_visit_id="${visitId}" && document_type_id="${documentTypeId}"`,
+                sort: '-created',
+            });
+        } catch (err: any) {
+            console.error('PocketBase error fetching patient documents:', err);
+            throw new Error('Failed to fetch patient documents');
+        }
+    }
 }
+
+// Document type for prescriptions, reports, etc.
+export type DocumentType = {
+    id: string;
+    name_en: string;
+    name_ar: string;
+    created?: string;
+    updated?: string;
+};
+
+// Patient document type
+export type PatientDocument = {
+    id: string;
+    patient_id: string;
+    related_visit_id: string;
+    document_type_id: string;
+    document: string;
+    created?: string;
+    updated?: string;
+};

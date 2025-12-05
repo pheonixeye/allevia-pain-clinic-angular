@@ -14,6 +14,7 @@ bootstrapApplication(AppComponent, appConfig)
 //done: Add the send booking request with sending notification request
 //done: revise the mobile navbar functionality
 //done: add arabic and english doctor && staff names
+//done: Add patient portal page
 //TODO: adjust services page
-//TODO: check seo optimization for articles and website - ssr
-//TODO: Add patient portal page
+//TODO: add real staff creds and images
+//todo: check seo optimization for articles and website - ssr

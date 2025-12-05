@@ -54,6 +54,10 @@ export const en = {
   'booking.submit': 'Request Appointment',
   'booking.success': 'Thank you! Your appointment request has been sent. Our team will contact you to confirm appointment details.',
   'booking.close': 'Close',
+  'booking.error.required': 'This field is required',
+  'booking.error.nameMin': 'Name must be at least 3 characters',
+  'booking.error.phone': 'Phone must be exactly 11 digits',
+  'booking.error.pastDate': 'Please select a future date',
 
   // Patient Portal
   'portal.title': 'Patient Portal',
@@ -75,4 +79,7 @@ export const en = {
   'portal.error.scan': 'Failed to scan QR code. Please try again.',
   'portal.error.query': 'Failed to retrieve visits. Please try again later.',
   'portal.error.noVisits': 'No visits found for this patient ID.',
+  'portal.prescriptions': 'Prescriptions',
+  'portal.prescription': 'Prescription',
+  'portal.noPrescriptions': 'No prescriptions found for this visit.',
 };

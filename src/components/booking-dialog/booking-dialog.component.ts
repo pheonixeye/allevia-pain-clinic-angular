@@ -115,7 +115,7 @@ export class BookingDialogComponent {
 
   getFieldError(fieldName: string): string {
     const field = this.bookingForm.get(fieldName);
-    const t = this.translations;
+    const t = this.translations();
 
     if (!field || !field.errors || !field.touched) {
       return '';

@@ -6,7 +6,9 @@
     <section class="bg-sky-600 dark:bg-sky-800 text-white py-16">
         <div class="container mx-auto px-6 text-center">
             <h1 class="text-4xl md:text-5xl font-bold mb-4">{{ t['portal.title'] }}</h1>
+            @if (!scannedPatientId()) {
             <p class="text-lg md:text-xl max-w-2xl mx-auto">{{ t['portal.welcome'] }}</p>
+            }
         </div>
     </section>
 
@@ -98,9 +100,11 @@
                 <!-- Visit Cards -->
                 <div class="space-y-4">
                     @for (visit of visits(); track visit.id) {
-                    <div
-                        class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:shadow-md transition-shadow">
-                        <div class="flex items-center justify-between">
+                    <div class="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden transition-shadow"
+                        [class.shadow-md]="expandedVisitId() === visit.id">
+                        <!-- Visit Header (Clickable) -->
+                        <button (click)="toggleVisit(visit)"
+                            class="w-full p-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors cursor-pointer">
                             <div class="flex items-center gap-3">
                                 <svg class="w-6 h-6 text-sky-600 dark:text-sky-400" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24">
@@ -108,12 +112,56 @@
                                         d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
                                     </path>
                                 </svg>
-                                <div>
-                                    <p class="text-lg font-semibold text-slate-800 dark:text-gray-100">{{
-                                        formatDate(visit.visit_date) }}</p>
+                                <p class="text-lg font-semibold text-slate-800 dark:text-gray-100">{{
+                                    formatDate(visit.visit_date) }}</p>
+                            </div>
+                            <!-- Expand/Collapse Icon -->
+                            <svg class="w-5 h-5 text-gray-500 dark:text-gray-400 transition-transform"
+                                [class.rotate-180]="expandedVisitId() === visit.id" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+
+                        <!-- Documents Section (Expandable) -->
+                        @if (expandedVisitId() === visit.id) {
+                        <div class="border-t border-gray-200 dark:border-gray-700 p-4 bg-gray-50 dark:bg-slate-800/50">
+                            @if (isLoadingDocuments()) {
+                            <div class="flex items-center justify-center py-4">
+                                <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-sky-600"></div>
+                                <span class="ml-2 text-slate-600 dark:text-gray-300">{{ t['portal.loading'] }}</span>
+                            </div>
+                            } @else if (visitDocuments().length === 0) {
+                            <p class="text-center text-slate-500 dark:text-gray-400 py-4">
+                                {{ t['portal.noPrescriptions'] }}
+                            </p>
+                            } @else {
+                            <div class="space-y-3">
+                                <h4 class="font-semibold text-slate-700 dark:text-gray-200">
+                                    {{ t['portal.prescriptions'] }}
+                                </h4>
+                                <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                                    @for (doc of visitDocuments(); track doc.id) {
+                                    <a [href]="getFullDocumentUrl(doc)" target="_blank"
+                                        class="flex flex-col items-center p-3 bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-sky-500 dark:hover:border-sky-400 transition-colors">
+                                        <svg class="w-10 h-10 text-sky-600 dark:text-sky-400 mb-2" fill="none"
+                                            stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                                            </path>
+                                        </svg>
+                                        <span
+                                            class="text-sm text-center text-slate-700 dark:text-gray-300 truncate w-full">
+                                            {{ t['portal.prescription'] }}
+                                        </span>
+                                    </a>
+                                    }
                                 </div>
                             </div>
+                            }
                         </div>
+                        }
                     </div>
                     }
                 </div>

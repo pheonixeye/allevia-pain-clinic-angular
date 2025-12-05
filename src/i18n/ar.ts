@@ -54,6 +54,10 @@ export const ar = {
   'booking.submit': 'طلب موعد',
   'booking.success': 'شكرًا لك! تم إرسال طلب الموعد بنجاح. سيتم التواصل من العيادة لمراجعة تفاصيل الحجز.',
   'booking.close': 'إغلاق',
+  'booking.error.required': 'هذا الحقل مطلوب',
+  'booking.error.nameMin': 'يجب أن يكون الاسم 3 أحرف على الأقل',
+  'booking.error.phone': 'يجب أن يكون رقم الهاتف 11 رقمًا بالضبط',
+  'booking.error.pastDate': 'يرجى اختيار تاريخ مستقبلي',
 
   // Patient Portal
   'portal.title': 'بوابة المرضى',
@@ -75,4 +79,7 @@ export const ar = {
   'portal.error.scan': 'فشل مسح رمز الاستجابة السريعة. حاول مرة أخرى.',
   'portal.error.query': 'فشل استرداد الزيارات. يرجى المحاولة مرة أخرى لاحقًا.',
   'portal.error.noVisits': 'لم يتم العثور على زيارات لمعرف المريض هذا.',
+  'portal.prescriptions': 'الوصفات الطبية',
+  'portal.prescription': 'وصفة طبية',
+  'portal.noPrescriptions': 'لم يتم العثور على وصفات طبية لهذه الزيارة.',
 };

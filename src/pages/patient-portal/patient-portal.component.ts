@@ -1,14 +1,18 @@
-import { Component, ChangeDetectionStrategy, inject, signal, OnDestroy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, signal, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Html5Qrcode } from 'html5-qrcode';
 import { TranslationService } from '../../services/translation.service';
-import { PocketBaseService, Patient } from '../../services/pocketbase.service';
+import { PocketBaseService, Patient, PatientDocument } from '../../services/pocketbase.service';
 
 interface Visit {
     id: string;
     patient_id: string;
     visit_date: string;
 }
+
+const DOCUMENT_TYPE_NAME = 'Prescription';
+const DOCUMENT_TYPE_ID_KEY = 'allevia_document_type_id';
 
 @Component({
     selector: 'app-patient-portal',
@@ -17,7 +21,9 @@ interface Visit {
     imports: [CommonModule],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PatientPortalComponent implements OnDestroy {
+export class PatientPortalComponent implements OnInit, OnDestroy {
+    private route = inject(ActivatedRoute);
+    private router = inject(Router);
     translationService = inject(TranslationService);
     pocketbaseService = inject(PocketBaseService);
 
@@ -37,7 +43,51 @@ export class PatientPortalComponent implements OnDestroy {
     totalPages = signal(1);
     perPage = 5;
 
+    // Document fetching
+    private documentTypeId: string | null = null;
+    expandedVisitId = signal<string | null>(null);
+    visitDocuments = signal<PatientDocument[]>([]);
+    isLoadingDocuments = signal(false);
+
     private html5QrCode: Html5Qrcode | null = null;
+
+    async ngOnInit() {
+        await this.loadDocumentTypeId();
+
+        // Check if patientId is in the route
+        const patientIdFromRoute = this.route.snapshot.paramMap.get('patientId');
+        if (patientIdFromRoute) {
+            // Load patient data directly without scanning
+            this.scannedPatientId.set(patientIdFromRoute);
+            this.currentPage.set(1);
+            await this.fetchPatientDetails(patientIdFromRoute);
+            await this.fetchVisits(patientIdFromRoute, 1);
+        }
+    }
+
+    /**
+     * Load document type ID from localStorage or fetch from PocketBase
+     */
+    private async loadDocumentTypeId() {
+        // Check localStorage first
+        const storedId = localStorage.getItem(DOCUMENT_TYPE_ID_KEY);
+        if (storedId) {
+            this.documentTypeId = storedId;
+            console.log('Document type ID loaded from localStorage:', storedId);
+            return;
+        }
+
+        // Fetch from PocketBase
+        try {
+            const documentType = await this.pocketbaseService.getDocumentTypeByName(DOCUMENT_TYPE_NAME);
+            this.documentTypeId = documentType.id;
+            localStorage.setItem(DOCUMENT_TYPE_ID_KEY, documentType.id);
+            console.log('Document type ID fetched and cached:', documentType.id);
+        } catch (error) {
+            console.error('Failed to fetch document type:', error);
+            // Continue without document type ID - documents won't be fetchable
+        }
+    }
 
     async startScanner() {
         this.errorMessage.set(null);
@@ -77,12 +127,6 @@ export class PatientPortalComponent implements OnDestroy {
         } catch (error: any) {
             console.error('Scanner error:', error);
             this.errorMessage.set(error?.message || 'Failed to start camera. Please check permissions.');
-            // Keep isScanning true so user can retry if it was a temporary glitch, 
-            // but in this case (start failed), we might want to reset.
-            // However, user requested "component disappears when an error occurs... make it available to scan again"
-            // So we keep isScanning true but show error.
-            // But if start failed, the scanner UI might not be there. 
-            // Let's keep isScanning true so the "Cancel Scan" button is visible and user can try again.
         }
     }
 
@@ -105,12 +149,9 @@ export class PatientPortalComponent implements OnDestroy {
         // Stop scanner
         await this.stopScanner();
 
-        // Set patient ID and fetch details
-        this.scannedPatientId.set(patientId);
-        this.currentPage.set(1);
-
-        await this.fetchPatientDetails(patientId);
-        await this.fetchVisits(patientId, 1);
+        // Navigate to URL with patient ID
+        const lang = this.currentLang();
+        this.router.navigate([`/${lang}/patient-portal`, patientId]);
     }
 
     async fetchPatientDetails(patientId: string) {
@@ -121,9 +162,6 @@ export class PatientPortalComponent implements OnDestroy {
         } catch (error: any) {
             console.error('Fetch patient error:', error);
             this.errorMessage.set('Could not find patient details. Please check the QR code.');
-            // We still fetch visits even if patient details fail, or maybe stop?
-            // User requirement: "display a list of visits by the patient"
-            // If patient fetch fails, we might still want to show visits if possible, but likely the ID is wrong.
         } finally {
             this.isLoading.set(false);
         }
@@ -131,8 +169,6 @@ export class PatientPortalComponent implements OnDestroy {
 
     async fetchVisits(patientId: string, page: number) {
         this.isLoading.set(true);
-        // Don't clear error message here if it was set by fetchPatientDetails
-        // this.errorMessage.set(null); 
 
         try {
             const result = await this.pocketbaseService.getPatientVisits(patientId, page, this.perPage);
@@ -142,7 +178,6 @@ export class PatientPortalComponent implements OnDestroy {
             this.currentPage.set(page);
 
             if (result.items.length === 0 && page === 1) {
-                // Only show "no visits" if we didn't already have an error
                 if (!this.errorMessage()) {
                     this.errorMessage.set('No visits found for this patient.');
                 }
@@ -154,6 +189,59 @@ export class PatientPortalComponent implements OnDestroy {
         } finally {
             this.isLoading.set(false);
         }
+    }
+
+    /**
+     * Toggle visit expansion and fetch documents if expanding
+     */
+    async toggleVisit(visit: Visit) {
+        if (this.expandedVisitId() === visit.id) {
+            // Collapse
+            this.expandedVisitId.set(null);
+            this.visitDocuments.set([]);
+            return;
+        }
+
+        // Expand and fetch documents
+        this.expandedVisitId.set(visit.id);
+        this.visitDocuments.set([]);
+
+        if (!this.documentTypeId) {
+            console.warn('Document type ID not available');
+            return;
+        }
+
+        this.isLoadingDocuments.set(true);
+
+        try {
+            const documents = await this.pocketbaseService.getPatientDocuments(
+                visit.patient_id,
+                visit.id,
+                this.documentTypeId
+            );
+            this.visitDocuments.set(documents);
+        } catch (error) {
+            console.error('Failed to fetch documents:', error);
+            this.visitDocuments.set([]);
+        } finally {
+            this.isLoadingDocuments.set(false);
+        }
+    }
+
+    /**
+     * Get document file URL
+     */
+    getDocumentUrl(doc: PatientDocument): string {
+        const pb = this.pocketbaseService.getClient();
+        return pb.files.getURL(doc, doc.document, { thumb: '100x100' });
+    }
+
+    /**
+     * Get full document URL for viewing/downloading
+     */
+    getFullDocumentUrl(doc: PatientDocument): string {
+        const pb = this.pocketbaseService.getClient();
+        return pb.files.getURL(doc, doc.document);
     }
 
     async nextPage() {
@@ -175,6 +263,12 @@ export class PatientPortalComponent implements OnDestroy {
         this.currentPage.set(1);
         this.totalPages.set(1);
         this.errorMessage.set(null);
+        this.expandedVisitId.set(null);
+        this.visitDocuments.set([]);
+
+        // Navigate back to patient portal without ID
+        const lang = this.currentLang();
+        this.router.navigate([`/${lang}/patient-portal`]);
     }
 
     formatDate(dateString: string): string {

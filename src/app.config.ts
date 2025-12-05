@@ -35,6 +35,7 @@ export const routes: Routes = [
       { path: 'articles', component: ArticlesComponent },
       { path: 'articles/:id', component: ArticleDetailComponent },
       { path: 'patient-portal', component: PatientPortalComponent },
+      { path: 'patient-portal/:patientId', component: PatientPortalComponent },
       { path: '', redirectTo: 'home', pathMatch: 'full' }
     ]
   },
